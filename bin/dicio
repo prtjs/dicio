@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+
+'use strict';
+
+var request = require('request');
+var diacritics = require('diacritic');
+
+var argv = diacritics.clean(process.argv[2]).toLowerCase();
+var name = process.argv[1].replace(/^.*[\\\/]/, '');
+
+if (!argv.length) {
+    process.exit(0);
+}
+
+var url = 'http://dicionariodoaurelio.com/' + argv;
+
+request(url, function (error, response, body) {
+    if (error || response.statusCode !== 200) {
+        console.log('Erro!');
+        process.exit(0);
+    }
+
+    var re = /class='descricao'>/;
+
+    if (!re.test(body)) {
+        console.log('Palavra não encontrada.');
+        process.exit(0);
+    }
+
+    var text = body.split(re)[1].split('</span>')[0];
+    console.log(text.replace(/<br>/g, ' '));
+});

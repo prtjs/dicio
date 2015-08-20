@@ -1,0 +1,18 @@
+{
+    "name": "dicio",
+    "version": "0.0.0",
+    "description": "Dicionário De Português Via Linha De Comando.",
+    "bin": {
+        "dicio": "./bin/dicio"
+    },
+    "dependencies": {
+        "request": "^2.61.0",
+        "diacritic": "^0.0.2"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/theuves/dicio.git"
+    },
+    "author": "Matheus Alves",
+    "license": "MIT"
+}

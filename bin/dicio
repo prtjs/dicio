@@ -6,7 +6,6 @@ var request = require('request');
 var diacritics = require('diacritic');
 
 var argv = diacritics.clean(process.argv[2]).toLowerCase();
-var name = process.argv[1].replace(/^.*[\\\/]/, '');
 
 if (!argv.length) {
     process.exit(0);
@@ -28,5 +27,11 @@ request(url, function (error, response, body) {
     }
 
     var text = body.split(re)[1].split('</span>')[0];
+    
+    if (!text.length) {
+        console.log('Palavra não encontrada.');
+        process.exit(0);
+    }
+    
     console.log(text.replace(/<br>/g, ' '));
 });

@@ -33,5 +33,5 @@ request(url, function (error, response, body) {
         process.exit(0);
     }
     
-    console.log(text.replace(/<br>/g, ' '));
+    console.log(text.replace(/<br>/g, '\n'));
 });

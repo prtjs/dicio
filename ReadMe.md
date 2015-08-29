@@ -1,6 +1,6 @@
 # [`dicio`](http://npm.im/dicio)
 
-*Dicionário De Português Via Linha De Comando.*
+*Dicionário de Português via Linha de Comando.*
 
 ```
  ____ ____ ____ ____ ____ 

@@ -1,6 +1,6 @@
 {
     "name": "dicio",
-    "version": "0.0.4",
+    "version": "0.1.0",
     "description": "Dicionário de Português via Linha de Comando.",
     "bin": {
         "dicio": "./bin/dicio"

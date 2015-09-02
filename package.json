@@ -6,7 +6,6 @@
         "dicio": "./bin/dicio"
     },
     "dependencies": {
-        "request": "^2.61.0",
         "diacritic": "^0.0.2"
     },
     "repository": {

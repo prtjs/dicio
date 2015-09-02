@@ -7,6 +7,10 @@ var http = require('http');
 var iconv = require('iconv-lite');
 var request = require('request');
 
+var error = function() {
+    return failure('Serviço indisponível.');
+}
+
 var failure = function(error) {
     process.stderr.write(error + '\n');
     process.exit(1);
@@ -14,7 +18,7 @@ var failure = function(error) {
 
 var success = function(response) {
     if (response.statusCode !== 200) {
-        return failure('Erro!');
+        return error();
     }
 
     response.pipe(iconv.decodeStream('ISO-8859-1')).collect(function(error, body) {
@@ -37,9 +41,9 @@ var success = function(response) {
 var argv = diacritics.clean(process.argv[2]).toLowerCase();
 
 if (!argv.length) {
-    process.exit(0);
+    return failure('Uso: dicio <palavra>');
 }
 
 var url = 'http://dicionariodoaurelio.com/' + argv;
 
-http.get(url, success).on('error', failure);
+http.get(url, success).on('error', error);

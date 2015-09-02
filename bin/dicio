@@ -2,8 +2,37 @@
 
 'use strict';
 
-var request = require('request');
 var diacritics = require('diacritic');
+var http = require('http');
+var iconv = require('iconv-lite');
+var request = require('request');
+
+var failure = function(error) {
+    process.stderr.write(error + '\n');
+    process.exit(1);
+};
+
+var success = function(response) {
+    if (response.statusCode !== 200) {
+        return failure('Erro!');
+    }
+
+    response.pipe(iconv.decodeStream('ISO-8859-1')).collect(function(error, body) {
+        var re = /class='descricao'>/;
+
+        if (!re.test(body)) {
+            return failure('Palavra não encontrada.');
+        }
+
+        var text = body.split(re)[1].split('</span>')[0];
+
+        if (!text.length) {
+            return failure('Palavra não encontrada.');
+        }
+
+        process.stdout.write(text.replace(/<br>/g, ' ') + '\n');
+    });
+};
 
 var argv = diacritics.clean(process.argv[2]).toLowerCase();
 
@@ -13,25 +42,4 @@ if (!argv.length) {
 
 var url = 'http://dicionariodoaurelio.com/' + argv;
 
-request(url, function (error, response, body) {
-    if (error || response.statusCode !== 200) {
-        console.log('Erro!');
-        process.exit(0);
-    }
-
-    var re = /class='descricao'>/;
-
-    if (!re.test(body)) {
-        console.log('Palavra não encontrada.');
-        process.exit(0);
-    }
-
-    var text = body.split(re)[1].split('</span>')[0];
-    
-    if (!text.length) {
-        console.log('Palavra não encontrada.');
-        process.exit(0);
-    }
-    
-    console.log(text.replace(/<br>/g, ' '));
-});
+http.get(url, success).on('error', failure);

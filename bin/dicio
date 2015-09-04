@@ -6,16 +6,20 @@ var diacritics = require('diacritic');
 var http = require('http');
 var iconv = require('iconv-lite');
 
-var failure = function(error) {
+var failure = function (error) {
     process.stderr.write(error + '\n');
     process.exit(1);
 };
 
-var serviceUnavailable = function() {
+var serviceUnavailable = function () {
     return failure('Serviço indisponível.');
-}
+};
 
-var success = function(response) {
+var wordNotFound = function () {
+    return failure('Palavra não encontrada.');
+};
+
+var success = function (response) {
     if (response.statusCode === 302) {
         return wordNotFound();
     }
@@ -24,7 +28,7 @@ var success = function(response) {
         return serviceUnavailable();
     }
 
-    response.pipe(iconv.decodeStream('ISO-8859-1')).collect(function(error, body) {
+    response.pipe(iconv.decodeStream('ISO-8859-1')).collect(function (error, body) {
         var re = /class='descricao'>/;
 
         if (!re.test(body)) {
@@ -41,14 +45,10 @@ var success = function(response) {
     });
 };
 
-var wordNotFound = function() {
-    return failure('Palavra não encontrada.');
-};
-
 var argv = diacritics.clean(process.argv[2]).toLowerCase();
 
 if (!argv.length) {
-    return failure('Uso: dicio <palavra>');
+    failure('Uso: dicio <palavra>');
 }
 
 var url = 'http://dicionariodoaurelio.com/' + argv;

@@ -13,6 +13,12 @@
         "type": "git",
         "url": "git://github.com/theuves/dicio.git"
     },
+    "keywords": [
+        "português",
+        "portuguese",
+        "dicionário",
+        "dictionary"
+    ],
     "author": "Matheus Alves",
     "license": "MIT"
 }

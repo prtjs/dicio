@@ -41,7 +41,7 @@ var success = function (response) {
             return wordNotFound();
         }
 
-        process.stdout.write(text.replace(/<br>/g, ' ') + '\n');
+        process.stdout.write(text.replace(/<br>/g, '\n') + '\n');
     });
 };
 

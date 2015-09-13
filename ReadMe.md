@@ -25,10 +25,10 @@ $ dicio <palavra>
 
 ```
 $ dicio computador
-1 O que faz cálculos (pessoa ou máquina). 2 Aparelho eletrônico usado para
-processar, guardar e tornar acessível informação de variados tipos. 3 O me
-smo que computador pessoal. 4 computador pessoal: computador para uso indi
-vidual, cuja construção se baseia num microprocessador.
+1 O que faz cálculos (pessoa ou máquina).
+2 Aparelho eletrônico usado para processar, guardar e tornar acessível informação de variados tipos.
+3 O mesmo que computador pessoal.
+4 computador pessoal: computador para uso individual, cuja construção se baseia num microprocessador.
 ```
 
 ## Licença

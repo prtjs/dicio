@@ -24,11 +24,11 @@ $ dicio <palavra>
  **Exemplo:**
 
 ```
-$ dicio computador
-1 O que faz cálculos (pessoa ou máquina).
-2 Aparelho eletrônico usado para processar, guardar e tornar acessível informação de variados tipos.
-3 O mesmo que computador pessoal.
-4 computador pessoal: computador para uso individual, cuja construção se baseia num microprocessador.
+$ dicio café
+1 Semente do cafezeiro.
+2 Bebida preparada com essa semente, depois de torrada e moída.
+3 Arbusto rubiáceo que produz o café.
+4 Local onde se pode tomar café e, normalmente, tomar refeições ligeiras.
 ```
 
 ## Licença

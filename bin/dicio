@@ -19,7 +19,16 @@ var wordNotFound = function () {
     return failure('Palavra não encontrada.');
 };
 
-var success = function (response) {
+var getLang = function (arg) {
+    if(arg) return arg.substr(2, arg.length);
+};
+
+var capFirstLetter = function(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
+var success = function (response, language) {
+
     if (response.statusCode === 302) {
         return wordNotFound();
     }
@@ -28,21 +37,73 @@ var success = function (response) {
         return serviceUnavailable();
     }
 
-    response.pipe(iconv.decodeStream('ISO-8859-1')).collect(function (error, body) {
+    response.pipe(iconv.decodeStream('ISO-8859-1')).collect(function (error, body) {  
         var re = /class='descricao'>/;
 
-        if (!re.test(body)) {
-            return wordNotFound();
+        if(language == 'en'){
+            englishFormat(error, body);            
+        }else{
+            if (!re.test(body)) {
+                return wordNotFound();
+            }
+
+            var text = body.split(re)[1].split('</span>')[0];
+
+            if (!text.length) {
+                return wordNotFound();
+            }
+
+            process.stdout.write(text.replace(/<br>/g, '\n') + '\n');            
         }
-
-        var text = body.split(re)[1].split('</span>')[0];
-
-        if (!text.length) {
-            return wordNotFound();
-        }
-
-        process.stdout.write(text.replace(/<br>/g, '\n') + '\n');
     });
+    
+};
+
+var englishFormat = function (error, body) {
+
+    var resume,
+        text = '';
+
+    var regexTags = /(<([^>]+)>)/ig;
+    var getResume = /class="short">/;
+    var listDef = /h3 class="definition">/;
+
+    if (getResume.test(body)) { 
+        resume = body
+            .split(getResume)[1]
+            .split('</p>')[0];
+
+        text += resume.replace(regexTags, '') + '\n';        
+
+    }    
+
+    if (listDef.test(body)) {
+
+        var textItems = body.split(listDef);
+
+        if(textItems.length > 0){
+            text = (!text.length) ? '' : text + '\n';
+
+            for (var i = 1; i < textItems.length; i++) {
+
+                textItems[i] = textItems[i]
+                    .split('</h3>')[0]
+                    .split('</a>')[1]
+                    .replace(/^\s+/g, '')
+                    .replace(regexTags, '');
+
+                text = text + i + '. ' + capFirstLetter(textItems[i]) + '.'  + '\n';
+            };
+        }                
+            
+    }
+
+    if(!text.length){
+        return wordNotFound();
+    }
+
+    process.stdout.write(text);  
+
 };
 
 var argv = diacritics.clean(process.argv[2]).toLowerCase();
@@ -51,6 +112,11 @@ if (!argv.length) {
     failure('Uso: dicio <palavra>');
 }
 
-var url = 'http://dicionariodoaurelio.com/' + argv;
+var parLang = process.argv[3];
+var url = (getLang(parLang) == 'en') ? 'http://www.vocabulary.com/dictionary/' : 'http://dicionariodoaurelio.com/';
 
-http.get(url, success).on('error', serviceUnavailable);
+http
+    .get(url + argv, function(response){
+        success(response, getLang(parLang));
+    })
+    .on('error', serviceUnavailable);

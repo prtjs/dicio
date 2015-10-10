@@ -21,7 +21,7 @@ $ npm install --global dicio
 $ dicio <palavra>
 ```
 
- **Exemplo:**
+**Exemplo:**
 
 ```
 $ dicio café

@@ -34,6 +34,11 @@ var callback = function (response) {
     }
 
     response.pipe(iconv.decodeStream('ISO-8859-1')).collect(function (error, body) {
+        if (error) {
+            console.error('Erro!');
+            process.exit(1);
+        }
+
         var re = /class='descricao'>/;
 
         if (!re.test(body)) {

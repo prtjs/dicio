@@ -11,12 +11,12 @@ function wordNotFound() {
     process.exit(1);
 }
 
-var word = removerAcentos(process.argv[2]).toLowerCase();
-
-if (!word.length) {
+if (process.argv.length === 2) {
     console.log('Uso: dicio <palavra>');
     process.exit(0);
 }
+
+var word = removerAcentos(process.argv[2]).toLowerCase();
 
 var options = {
     host: 'dicionariodoaurelio.com',

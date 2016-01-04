@@ -2,16 +2,16 @@
 
 'use strict';
 
-var diacritics = require('diacritic');
 var http = require('http');
 var iconv = require('iconv-lite');
+var removerAcentos = require('remover-acentos');
 
 function wordNotFound() {
     console.error('Palavra não encontrada.');
     process.exit(1);
 }
 
-var word = diacritics.clean(process.argv[2]).toLowerCase();
+var word = removerAcentos(process.argv[2]).toLowerCase();
 
 if (!word.length) {
     console.log('Uso: dicio <palavra>');

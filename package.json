@@ -6,8 +6,8 @@
         "dicio": "./bin/dicio"
     },
     "dependencies": {
-        "diacritic": "^0.0.2",
-        "iconv-lite": "^0.4.11"
+        "iconv-lite": "^0.4.11",
+        "remover-acentos": "^0.0.1"
     },
     "repository": {
         "type": "git",

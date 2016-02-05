@@ -4,7 +4,7 @@
 
 var http = require('http');
 var iconv = require('iconv-lite');
-var removerAcentos = require('remover-acentos');
+var removeAccents = require('remover-acentos');
 
 function wordNotFound() {
     console.error('Palavra não encontrada.');
@@ -16,7 +16,7 @@ if (process.argv.length === 2) {
     process.exit(0);
 }
 
-var word = removerAcentos(process.argv[2]).toLowerCase();
+var word = removeAccents(process.argv[2]).toLowerCase();
 
 var options = {
     host: 'dicionariodoaurelio.com',

@@ -2,9 +2,9 @@
 
 'use strict';
 
-var http = require('http');
 var iconv = require('iconv-lite');
 var removeAccents = require('remover-acentos');
+var request = require('request');
 
 function wordNotFound() {
     console.error('Palavra não encontrada.');
@@ -18,12 +18,9 @@ if (process.argv.length === 2) {
 
 var word = removeAccents(process.argv[2]).toLowerCase();
 
-var options = {
-    host: 'dicionariodoaurelio.com',
-    path: '/' + word
-};
+var url = 'https://dicionariodoaurelio.com/' + word;
 
-var callback = function (response) {
+var callback = function (error, response, body) {
     if (response.statusCode === 302) {
         wordNotFound();
     }
@@ -33,26 +30,22 @@ var callback = function (response) {
         process.exit(1);
     }
 
-    response.pipe(iconv.decodeStream('ISO-8859-1')).collect(function (error, body) {
-        if (error) {
-            console.error('Erro!');
-            process.exit(1);
-        }
+    if (error) {
+        console.error('Erro!');
+        process.exit(1);
+    }
 
-        var re = /class='descricao'>/;
+    body = iconv.decode(new Buffer(body), 'ISO-8859-1')
+            .split('<article>')[1]
+            .split('</article>')[0]
+            .replace(/<h2>Significado\sde\s.*<\/h2>/g, '')
+            .replace(/<br>/g, '')
+            .trim();
 
-        if (!re.test(body)) {
-            wordNotFound();
-        }
-
-        var text = body.split(re)[1].split('</span>')[0];
-
-        if (!text.length) {
-            wordNotFound();
-        }
-
-        console.log(text.replace(/<br>/g, '\n'));
-    });
+    console.log(body);
 };
 
-http.get(options, callback).end();
+request.get({
+    'uri': url,
+    'encoding': null
+}, callback);

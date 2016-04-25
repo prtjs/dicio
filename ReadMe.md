@@ -1,6 +1,9 @@
-# [`dicio`](http://npm.im/dicio)
+# dicio
 
-*Dicionário de português via linha de comando.*
+> Dicionário de português via linha de comando.
+
+*É necessário estar conectado com a internet.<br>
+Todas as informações são extraídas do site [dicionariodoaurelio.com].*
 
 ```
  ____ ____ ____ ____ ____ 
@@ -11,17 +14,15 @@
 
 ## Instalação
 
+Com [NPM](https://github.com/npm/npm):
+
 ```
 $ npm install --global dicio
 ```
 
 ## Uso
 
-```
-$ dicio <palavra>
-```
-
-**Exemplo:**
+Veja alguns exemplos:
 
 ```
 $ dicio café
@@ -34,3 +35,5 @@ $ dicio café
 ## Licença
 
 [MIT](http://theuves.mit-license.org/)
+
+[dicionariodoaurelio.com]:https://dicionariodoaurelio.com/

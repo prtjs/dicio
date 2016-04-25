@@ -42,6 +42,10 @@ var callback = function (error, response, body) {
             .replace(/<br>/g, '')
             .trim();
 
+    if (body === '') {
+        wordNotFound();
+    }
+
     console.log(body);
 };
 

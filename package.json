@@ -1,25 +1,26 @@
 {
-    "name": "dicio",
-    "version": "0.3.3",
-    "description": "Dicionário de português via linha de comando.",
-    "bin": {
-        "dicio": "./bin/dicio"
-    },
-    "dependencies": {
-        "iconv-lite": "^0.4.11",
-        "remover-acentos": "^0.0.1",
-        "request": "^2.65.0"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/theuves/dicio.git"
-    },
-    "keywords": [
-        "português",
-        "portuguese",
-        "dicionário",
-        "dictionary"
-    ],
-    "author": "Matheus Alves",
-    "license": "MIT"
+  "name": "dicio",
+  "version": "0.3.3",
+  "description": "Dicionário de português via linha de comando.",
+  "bin": {
+    "dicio": "./bin/dicio"
+  },
+  "dependencies": {
+    "iconv-lite": "^0.4.11",
+    "remover-acentos": "^0.0.1",
+    "request": "^2.65.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/theuves/dicio.git"
+  },
+  "keywords": [
+    "português", "portuguese",
+    "dicionário", "dictionary"
+  ],
+  "author": {
+    "name": "Matheus Alves",
+    "email": "theuves@gmail.com"
+  },
+  "license": "MIT"
 }

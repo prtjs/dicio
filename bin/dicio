@@ -35,7 +35,7 @@ var callback = function (error, response, body) {
         process.exit(1);
     }
 
-    body = iconv.decode(new Buffer(body), 'ISO-8859-1')
+    body = iconv.decode(new Buffer(body), 'UTF-8')
             .split('<article>')[1]
             .split('</article>')[0]
             .replace(/<h2>Significado\sde\s.*<\/h2>/g, '')

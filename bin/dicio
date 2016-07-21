@@ -3,6 +3,7 @@
 'use strict';
 
 var iconv = require('iconv-lite');
+var trimRepeated = require('trim-repeated');
 var removeAccents = require('remover-acentos');
 var request = require('request');
 
@@ -41,6 +42,8 @@ var callback = function (error, response, body) {
             .replace(/<h2>Significado\sde\s.*<\/h2>/g, '')
             .replace(/<br>/g, '')
             .trim();
+
+    body = body.replace(/:\s+/gi, ': ');
 
     if (body === '') {
         wordNotFound();

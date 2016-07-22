@@ -1,27 +1,20 @@
-#!/usr/bin/env node
-
 'use strict';
 
-var iconv = require('iconv-lite');
-var trimRepeated = require('trim-repeated');
-var removeAccents = require('remover-acentos');
-var request = require('request');
-
-function wordNotFound() {
+const wordNotFound = () => {
     console.error('Palavra não encontrada.');
     process.exit(1);
-}
+};
 
 if (process.argv.length === 2) {
     console.log('Uso: dicio <palavra>');
     process.exit(0);
 }
 
-var word = removeAccents(process.argv[2]).toLowerCase();
+const removeAccents = require('remover-acentos');
+const word = removeAccents(process.argv[2]).toLowerCase();
+const url = 'https://dicionariodoaurelio.com/' + word;
 
-var url = 'https://dicionariodoaurelio.com/' + word;
-
-var callback = function (error, response, body) {
+const callback = (error, response, body) => {
     if (response.statusCode === 302) {
         wordNotFound();
     }
@@ -36,12 +29,13 @@ var callback = function (error, response, body) {
         process.exit(1);
     }
 
+    const iconv = require('iconv-lite');
     body = iconv.decode(new Buffer(body), 'UTF-8')
-            .split('<article>')[1]
-            .split('</article>')[0]
-            .replace(/<h2>Significado\sde\s.*<\/h2>/g, '')
-            .replace(/<br>/g, '')
-            .trim();
+        .split('<article>')[1]
+        .split('</article>')[0]
+        .replace(/<h2>Significado\sde\s.*<\/h2>/g, '')
+        .replace(/<br>/g, '')
+        .trim();
 
     body = body.replace(/:\s+/gi, ': ');
 
@@ -52,6 +46,7 @@ var callback = function (error, response, body) {
     console.log(body);
 };
 
+const request = require('request');
 request.get({
     'uri': url,
     'encoding': null

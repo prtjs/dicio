@@ -2,54 +2,46 @@
 
 'use strict';
 
-const wordNotFound = () => {
-    console.error('Palavra não encontrada.');
-    process.exit(1);
-};
+const iconv = require('iconv-lite');
+const removeAccents = require('remover-acentos');
+const request = require('request');
 
-if (process.argv.length === 2) {
-    console.log('Uso: dicio <palavra>');
+if (!process.argv[2]) {
+    console.error('Uso: dicio <palavra>');
     process.exit(0);
 }
 
-const removeAccents = require('remover-acentos');
 const word = removeAccents(process.argv[2]).toLowerCase();
-const url = 'https://dicionariodoaurelio.com/' + word;
 
-const callback = (error, response, body) => {
-    if (response.statusCode === 302) {
-        wordNotFound();
-    }
-
-    if (response.statusCode !== 200) {
-        console.error('Serviço indisponível.');
-        process.exit(1);
-    }
-
+request.get({
+    'uri': 'https://dicionariodoaurelio.com/' + word,
+    'encoding': null
+}, (error, response, body) => {
     if (error) {
         console.error('Erro!');
         process.exit(1);
+    } else if (response.statusCode === 302) {
+        console.error('Palavra não enontrada.');
+        process.exit(1);
+    } else if (response.statusCode !== 200) {
+        console.error('Serviço indisponível.');
+        process.exit(1);
+    } else {
+        body = iconv.decode(new Buffer(body), 'UTF-8')
+            .split('<article>')[1]
+            .split('</article>')[0]
+            .replace(/<h2>Significado\sde\s.*<\/h2>/g, '')
+            .replace(/<br>/g, '')
+            .trim();
+
+        body = body.replace(/:\s+/gi, ': ');
+
+        if (body === '') {
+            console.error('Palavra não enontrada.');
+            process.exit(1);
+        }
+
+        console.log(body);
+        process.exit(0);
     }
-
-    const iconv = require('iconv-lite');
-    body = iconv.decode(new Buffer(body), 'UTF-8')
-        .split('<article>')[1]
-        .split('</article>')[0]
-        .replace(/<h2>Significado\sde\s.*<\/h2>/g, '')
-        .replace(/<br>/g, '')
-        .trim();
-
-    body = body.replace(/:\s+/gi, ': ');
-
-    if (body === '') {
-        wordNotFound();
-    }
-
-    console.log(body);
-};
-
-const request = require('request');
-request.get({
-    'uri': url,
-    'encoding': null
-}, callback);
+});

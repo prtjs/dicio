@@ -36,7 +36,7 @@ request.get({
 
         body = body.replace(/:\s+/gi, ': ');
 
-        if (body === '') {
+        if (!body) {
             console.error('Palavra não enontrada.');
             process.exit(1);
         }

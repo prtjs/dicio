@@ -31,7 +31,7 @@ request.get({
             .split('<h3 itemprop="description">\n')[1] // 1
             .split('</h3>')[0] // 2
             .replace(/<br>/g, '') // 3
-            .replace(/:\s+/gi, ': ') // 4
+            .replace(/:\s+/gi, ': '); // 4
 
         // 1 e 2 - extrai o significado da palavra
         // 3 - remove tags <br> no final de cada palavra

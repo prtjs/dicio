@@ -1,6 +1,6 @@
 {
   "name": "dicio",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "Dicionário de português via linha de comando.",
   "bin": {
     "dicio": "./bin/dicio"
@@ -14,10 +14,6 @@
     "type": "git",
     "url": "git://github.com/theuves/dicio.git"
   },
-  "keywords": [
-    "português", "portuguese",
-    "dicionário", "dictionary"
-  ],
   "author": {
     "name": "Matheus Alves",
     "email": "theuves@gmail.com"

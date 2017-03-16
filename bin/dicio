@@ -28,10 +28,13 @@ request.get({
         process.exit(1);
     } else {
         body = iconv.decode(new Buffer(body), 'UTF-8')
-            .split('<h3 itemprop="description">\n')[1] // 1
-            .split('</h3>')[0] // 2
-            .replace(/<br>/g, '') // 3
-            .replace(/:\s+/gi, ': '); // 4
+        .split('<div itemprop="articleBody">\n')[1] // 1
+        .split('</div>')[0] // 2
+        .replace(/<h3 itemprop="headline">\n/g, '') // 3
+        .replace(/<h3>/g, '') // 3
+        .replace(/<\/h3>\n/g, '') // 3
+        .replace(/<br>/g, '') // 3
+        .replace(/:\s+/gi, ': '); // 4
 
         // 1 e 2 - extrai o significado da palavra
         // 3 - remove tags <br> no final de cada palavra

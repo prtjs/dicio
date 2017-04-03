@@ -9,7 +9,7 @@ Todos os dados são extraídos de &lt;https://dicionariodoaurelio.com/&gt;.
 ## Instalação
 
 ```
-$ npm install --global di-cio
+$ npm install --global dicio
 ```
 
 ## Uso

@@ -1,2 +1,4 @@
-node_modules
+node_modules/
+*.swp
+npm-debug.log
 yarn.lock

@@ -4,12 +4,12 @@
 
 :warning: Requer conexão com a internet.
 
-Os dados são extraídos de &lt;https://dicionariodoaurelio.com/&gt;.
+Todos os dados são extraídos de &lt;https://dicionariodoaurelio.com/&gt;.
 
 ## Instalação
 
 ```
-$ npm install --global dicio
+$ npm install --global di-cio
 ```
 
 ## Uso

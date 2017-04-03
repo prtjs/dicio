@@ -1,52 +1,40 @@
 #!/usr/bin/env node
+"use strict";
 
-'use strict';
+// dicio | matheus alves
+// https://github.com/theuves/dicio
 
-const iconv = require('iconv-lite');
-const removeAccents = require('remover-acentos');
-const request = require('request');
+var dicio = require("dicionario-do-aurelio");
+var word = process.argv[2];
 
-if (!process.argv[2]) {
-    console.error('Uso: dicio <palavra>');
-    process.exit(0);
-}
+if (!word) {
+  console.log("Uso: dicio <palavra>");
 
-const word = removeAccents(process.argv[2]).toLowerCase();
+  process.exit(0);
+} else {
+  dicio(word, function (error, data) {
+    var exitCode = 0;
 
-request.get({
-    'uri': 'https://dicionariodoaurelio.com/' + word,
-    'encoding': null
-}, (error, response, body) => {
     if (error) {
-        console.error('Erro!');
-        process.exit(1);
-    } else if (response.statusCode === 302) {
-        console.error('Palavra não enontrada.');
-        process.exit(1);
-    } else if (response.statusCode !== 200) {
-        console.error('Serviço indisponível.');
-        process.exit(1);
+      if (error.message === "Word not found") {
+        console.error("Palavra não encontrada.");
+      } else {
+        console.error("Erro!");
+      }
+
+      exitCode = 1;
     } else {
-        body = iconv.decode(new Buffer(body), 'UTF-8')
-            .split('<div itemprop="articleBody">\n')[1] // 1
-            .split('</div>')[0] // 1
-            .replace(/<h3 itemprop="headline">\n/g, '') // 2
-            .replace(/<h3>/g, '') // 2
-            .replace(/<\/h3>\n/g, '') // 2
-            .replace(/<br>/g, '') // 3
-            .replace(/:\s+/gi, ': '); // 4
+      if (data && Array.isArray(data)) {
+        console.log(data.map(function (item, index) {
+          return index + 1 + " - " + item;
+        }).join("\n"));
+      } else {
+        console.error("Erro!");
 
-        // 1 - extrai o significado da palavra
-        // 2 - remove tags desnecessárias
-        // 3 - remove tags <br> no final de cada palavra
-        // 4 - corrige problema com dois pontos e espaços duplicados
-
-        if (!body) {
-            console.error('Palavra não enontrada.');
-            process.exit(1);
-        }
-
-        console.log(body);
-        process.exit(0);
+        exitCode = 1;
+      }
     }
-});
+
+    process.exit(exitCode);
+  });
+}

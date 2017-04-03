@@ -6,9 +6,7 @@
     "dicio": "./bin/dicio"
   },
   "dependencies": {
-    "iconv-lite": "^0.4.11",
-    "remover-acentos": "^0.0.1",
-    "request": "^2.65.0"
+    "dicionario-do-aurelio": "^0.1.2"
   },
   "repository": {
     "type": "git",

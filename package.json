@@ -3,18 +3,10 @@
   "version": "0.3.9",
   "description": "Dicionário de português via linha de comando.",
   "bin": {
-    "dicio": "./bin/dicio"
+    "dicio": "./bin/dicio.js"
   },
-  "dependencies": {
-    "dicionario-do-aurelio": "^0.1.2"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/theuves/dicio.git"
-  },
-  "author": {
-    "name": "Matheus Alves",
-    "email": "theuves@gmail.com"
-  },
+  "dependencies": {},
+  "repository": "theuves/dicio",
+  "author": "Matheus Alves",
   "license": "MIT"
 }

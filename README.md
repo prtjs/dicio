@@ -25,7 +25,7 @@ Ele recebe apenas um argumento: uma palavra qualquer - da língua portuguesa.
 
 Exemplo básico:
 
-```bash
+```
 $ dicio café
 café: s.m. Fruto do cafeeiro. / Estabelecimento onde se serve café e outras bebidas; botequim.
 ```

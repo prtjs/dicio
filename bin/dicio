@@ -1,0 +1,31 @@
+#!/usr/bin/env node
+
+const request = require('request-promise')
+const cheerio = require('cheerio')
+const removeAccents = require('desacentuador')
+
+const [,, word] = process.argv
+
+if (!word) {
+  console.log('Uso: dicio <palavra>')
+  process.exit(0)
+}
+
+request({
+  uri: `https://www.dicio.com.br/${removeAccents(word)}/`,
+  transform: (body) => {
+    return cheerio.load(body)
+  }
+}).then(($) => {
+  const mean = $('.sg-social').data('text')
+
+  console.log(mean)
+}).catch(error => {
+  if (error.statusCode === 404) {
+    console.log('Palavra não encontrada.')
+    process.exit(1)
+  }
+
+  console.log('Error interno.')
+  process.exit(1)
+})

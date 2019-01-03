@@ -38,7 +38,7 @@ Isso significa que *café* e *cafe* são as mesmas coisas.
 ## Contribuição
 
 Os dados apresentados são extraídos diretamente do HTML do site, portanto, há
-grandes possibilidades do site atualizar ou sair fora do ar e essa ferramente
+grandes possibilidades do site atualizar ou sair fora do ar e essa ferramenta
 não conseguir fazer a raspagem das informações. Logo, se você estiver obtendo
 muitos erros verifique se o site está funcionando e abra uma *issue* aqui.
 

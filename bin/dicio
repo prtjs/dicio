@@ -15,6 +15,7 @@ if (!word) {
 
 request({
   uri: `https://www.dicio.com.br/${removeAccents(word)}/`,
+  encoding: 'latin1',
   transform: (body) => {
     return cheerio.load(body)
   }

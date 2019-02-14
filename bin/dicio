@@ -1,32 +1,122 @@
 #!/usr/bin/env node
 
+const pkg = require('../package.json')
 const request = require('request-promise')
 const cheerio = require('cheerio')
 const removeAccents = require('desacentuador')
-const printer = require('../src/printer')
+const print = require('../src/print')
 const htmlParser = require('../src/htmlParser')
 
-const [,, word] = process.argv
+const [,, ...args] = process.argv
+let options = []
+let showMeaning = true
+let word;
+
+for (let index in args) {
+  const arg = args[index]
+
+  switch (arg) {
+    case '--synonyms':
+    case '-s': {
+        if (options.includes('synonyms')) {
+          console.log(`dicio: Opção repetida: ${arg}`)
+          process.exit(1)
+        }
+        options = options.concat('synonyms')
+      }
+      break
+    case '--antonyms':
+    case '-a': {
+        if (options.includes('antonyms')) {
+          console.log(`dicio: Opção repetida: ${arg}`)
+          process.exit(1)
+        }
+        options = options.concat('antonyms')
+      }
+      break
+    case '--definition':
+    case '-d': {
+        if (options.includes('definition')) {
+          console.log(`dicio: Opção repetida: ${arg}`)
+          process.exit(1)
+        }
+        options = options.concat('definition')
+      }
+      break
+    case '--no-meaning':
+    case '-m': {
+        if (options.includes('no-meaning')) {
+          console.log(`dicio: Opção repetida: ${arg}`)
+          process.exit(1)
+        }
+        showMeaning = false
+      }
+      break
+    case '--no-colors':
+      // Não deve fazer nada, além de aceitar.
+      // É uma opção do módulo `colors`.
+      break
+    case '--help':
+    case '-h':
+    case '-?':
+      printHelp()
+      process.exit(0)
+      break
+    case '--version':
+    case '-v':
+      console.log(pkg.version)
+      process.exit(0)
+      break
+    default: {
+      if (/^-/.test(arg)) {
+        console.log(`dicio: Opção inválida: ${arg}`)
+        process.exit(1)
+      }
+      if (!!word) {
+        console.log(`dicio: Não foi esperado: ${arg}`)
+        process.exit(1)
+      }
+      word = arg
+    }
+  }
+}
 
 if (!word) {
-  console.log('Uso: dicio <palavra>')
+  console.log('dicio: Faltou a palavra.')
+  console.log('Uso: dicio <palavra> [...opções]\n')
+  console.log('Tente `dicio --help\' para mais informações.')
   process.exit(0)
 }
 
 request({
   uri: `https://www.dicio.com.br/${removeAccents(word)}/`,
   encoding: 'latin1',
-  transform: (body) => {
-    return cheerio.load(body)
-  }
+  transform: (body) => cheerio.load(body)
 }).then(($) => {
-  printer(htmlParser($))
+  print(htmlParser($), showMeaning, options)
 }).catch(error => {
   if (error.statusCode === 404) {
     console.log('Palavra não encontrada.')
     process.exit(1)
   }
 
-  console.log('Error interno.')
+  console.log('dicio: Error interno.')
+  console.log(`código: ${error.statusCode}`)
+  console.log(`descrição: ${error.message}`)
   process.exit(1)
 })
+
+function printHelp() {
+  console.log(`
+  Uso: dicio <palavra> [...opções]
+
+  Opções aceitas:
+
+    --synonyms, -s      Exibe os sinônimos da paalvra.
+    --antonyms, -a      Exibe os antônimos da palavra.
+    --definition, -d    Exibe a definição da palavra.
+    --no-meaning, -m    Não exibe o significado da palavra.
+    --no-colors         Não exibe cores.
+    --help, -h, -?      Exibe isso.
+    --version, -v       Exibe a versão atual.`)
+}

@@ -3,6 +3,8 @@
 const request = require('request-promise')
 const cheerio = require('cheerio')
 const removeAccents = require('desacentuador')
+const printer = require('../src/printer')
+const htmlParser = require('../src/htmlParser')
 
 const [,, word] = process.argv
 
@@ -13,13 +15,12 @@ if (!word) {
 
 request({
   uri: `https://www.dicio.com.br/${removeAccents(word)}/`,
+  encoding: 'latin1',
   transform: (body) => {
     return cheerio.load(body)
   }
 }).then(($) => {
-  const mean = $('.sg-social').data('text')
-
-  console.log(mean)
+  printer(htmlParser($))
 }).catch(error => {
   if (error.statusCode === 404) {
     console.log('Palavra não encontrada.')

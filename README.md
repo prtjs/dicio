@@ -80,7 +80,7 @@ Sinta-se livre para corrigir qualquer coisa e mandar novas ideias.
 ## Agradecimentos
 
 Muito obrigado ao [Felipe Nolleto](https://github.com/nolleto) por dar o
-ponta-pé inicial na estilização dos dados extraído presente nessa versão da
+pontapé inicial na estilização dos dados extraído presente nessa versão da
 ferramenta e a
 [todos os contribuidores](https://github.com/theuves/dicio/graphs/contributors)
 ao longo das versões anteriores.

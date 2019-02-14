@@ -42,18 +42,18 @@ $ dicio --help
 ```
 
 Use somente `dicio` e a palavra que deseja consultar para ver simplesmente o
-signficado dela. Não é necessário inserir acentuações na palavra pois elas serão
+significado dela. Não é necessário inserir acentuações na palavra pois elas serão
 removidas automaticamente durante a pesquisa.
 
 Caso queira ver mais informações sobre ela, como *sinônimos*, *antônimos* ou
 *definição* (como classe gramatical, separação silábica, plural, etc) então
-use os comandos:
+use as opções:
 
 * `--synonyms` ou `-s` para ver os sinônimos da paalvra.
 * `--antonyms` ou `-a` para ver os antônimos da palavra.
 * `--definition` ou `-d` para ver a definição da palavra.
 
-A odem de exibição desses itens será de acordo com a chamada deles.
+A ordem de exibição desses itens será de acordo com a chamada deles.
 
 O significado da palavra sempre aparecerá junto às outras informações. No
 entanto, caso você não queira exibi-lo, então você poderá usar a opção

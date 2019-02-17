@@ -166,11 +166,11 @@ const getDefinition = ($) => {
  * @param {Function} $ Função jQuery-like de toda a página.
  * @returns {object} Objeto com todas as informações.
  */
-const pageInformation = ($) => ({
+const getWordInformations = ($) => ({
   meaning: getMeaning($),
-  synonyms: { title: 'Sinônimos', content: getSynonyms($) },
-  antonyms: { title: 'Antônimos', content: getAntonym($) },
+  synonyms:   { title: 'Sinônimos', content: getSynonyms($) },
+  antonyms:   { title: 'Antônimos', content: getAntonym($) },
   definition: { title: 'Definição', content: getDefinition($) }
 })
 
-module.exports = pageInformation
+module.exports = getWordInformations

@@ -4,8 +4,23 @@ const pkg = require('../package.json')
 const request = require('request-promise')
 const cheerio = require('cheerio')
 const removeAccents = require('desacentuador')
-const print = require('../src/print')
-const htmlParser = require('../src/htmlParser')
+const printInformations = require('../src/printInformations')
+const getWordInformations = require('../src/getWordInformations')
+
+function printHelpMsg() {
+  console.log(`
+  Uso: dicio <palavra> [...opções]
+
+  Opções aceitas:
+
+    --synonyms, -s      Exibe os sinônimos da paalvra.
+    --antonyms, -a      Exibe os antônimos da palavra.
+    --definition, -d    Exibe a definição da palavra.
+    --no-meaning, -m    Não exibe o significado da palavra.
+    --no-colors         Não exibe cores.
+    --help, -h, -?      Exibe isso.
+    --version, -v       Exibe a versão atual.`)
+}
 
 const [,, ...args] = process.argv
 let options = []
@@ -53,13 +68,13 @@ for (let index in args) {
       }
       break
     case '--no-colors':
-      // Não deve fazer nada, além de aceitar.
-      // É uma opção do módulo `colors`.
+      // Apenas aceita o argument como válido.
+      // Este argumento é padrão do pacote `colors`.
       break
     case '--help':
     case '-h':
     case '-?':
-      printHelp()
+      printHelpMsg()
       process.exit(0)
       break
     case '--version':
@@ -88,13 +103,18 @@ if (!word) {
   process.exit(0)
 }
 
-request({
+const reqOptions = {
   uri: `https://www.dicio.com.br/${removeAccents(word)}/`,
   encoding: 'latin1',
   transform: (body) => cheerio.load(body)
-}).then(($) => {
-  print(htmlParser($), showMeaning, options)
-}).catch(error => {
+}
+
+const onSuccessReq = ($) => {
+  const wordInformations = getWordInformations($)
+  printInformations(wordInformations, showMeaning, options)
+}
+
+const onErrorReq = (error) => {
   if (error.statusCode === 404) {
     console.log('Palavra não encontrada.')
     process.exit(1)
@@ -104,19 +124,8 @@ request({
   console.log(`código: ${error.statusCode}`)
   console.log(`descrição: ${error.message}`)
   process.exit(1)
-})
-
-function printHelp() {
-  console.log(`
-  Uso: dicio <palavra> [...opções]
-
-  Opções aceitas:
-
-    --synonyms, -s      Exibe os sinônimos da paalvra.
-    --antonyms, -a      Exibe os antônimos da palavra.
-    --definition, -d    Exibe a definição da palavra.
-    --no-meaning, -m    Não exibe o significado da palavra.
-    --no-colors         Não exibe cores.
-    --help, -h, -?      Exibe isso.
-    --version, -v       Exibe a versão atual.`)
 }
+
+request(reqOptions)
+  .then(onSuccessReq)
+  .catch(onErrorReq)

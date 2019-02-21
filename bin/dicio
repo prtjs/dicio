@@ -1,107 +1,79 @@
 #!/usr/bin/env node
 
-const pkg = require('../package.json')
-const request = require('request-promise')
-const cheerio = require('cheerio')
+'use strict'
+
 const removeAccents = require('desacentuador')
-const printInformations = require('../src/printInformations')
+const cheerio = require('cheerio')
+const request = require('request-promise')
+
+// Locais
+const ArgumentParser = require('../src/ArgumentParser')
 const getWordInformations = require('../src/getWordInformations')
+const printInformations = require('../src/printInformations')
 
-function printHelpMsg() {
-  console.log(`
-  Uso: dicio <palavra> [...opções]
+// Estáticos
+const package = require('../package.json')
 
-  Opções aceitas:
-
-    --synonyms, -s      Exibe os sinônimos da palavra.
-    --antonyms, -a      Exibe os antônimos da palavra.
-    --definition, -d    Exibe a definição da palavra.
-    --no-meaning, -m    Não exibe o significado da palavra.
-    --no-colors         Não exibe cores.
-    --help, -h, -?      Exibe isso.
-    --version, -v       Exibe a versão atual.`)
-}
+// Nome das opções
+const SYNONYMS = 'SYNONYMS'
+const DEFINITION = 'DEFINITION'
+const NO_MEANING = 'NO_MEANING'
+const HELP = 'HELP'
+const VERSION = 'VERSION'
 
 const [,, ...args] = process.argv
-let options = []
-let showMeaning = true
-let word;
 
-for (let index in args) {
-  const arg = args[index]
-
-  switch (arg) {
-    case '--synonyms':
-    case '-s': {
-        if (options.includes('synonyms')) {
-          console.log(`dicio: Opção repetida: ${arg}`)
-          process.exit(1)
-        }
-        options = options.concat('synonyms')
-      }
-      break
-    case '--antonyms':
-    case '-a': {
-        if (options.includes('antonyms')) {
-          console.log(`dicio: Opção repetida: ${arg}`)
-          process.exit(1)
-        }
-        options = options.concat('antonyms')
-      }
-      break
-    case '--definition':
-    case '-d': {
-        if (options.includes('definition')) {
-          console.log(`dicio: Opção repetida: ${arg}`)
-          process.exit(1)
-        }
-        options = options.concat('definition')
-      }
-      break
-    case '--no-meaning':
-    case '-m': {
-        if (options.includes('no-meaning')) {
-          console.log(`dicio: Opção repetida: ${arg}`)
-          process.exit(1)
-        }
-        showMeaning = false
-      }
-      break
-    case '--no-colors':
-      // Apenas aceita o argument como válido.
-      // Este argumento é padrão do pacote `colors`.
-      break
-    case '--help':
-    case '-h':
-    case '-?':
-      printHelpMsg()
-      process.exit(0)
-      break
-    case '--version':
-    case '-v':
-      console.log(pkg.version)
-      process.exit(0)
-      break
-    default: {
-      if (/^-/.test(arg)) {
-        console.log(`dicio: Opção inválida: ${arg}`)
-        process.exit(1)
-      }
-      if (!!word) {
-        console.log(`dicio: Não foi esperado: ${arg}`)
-        process.exit(1)
-      }
-      word = arg
-    }
-  }
-}
-
-if (!word) {
-  console.log('dicio: Faltou a palavra.')
+if (args.length === 0) {
+  console.log('dicio: Informe uma palavra.')
   console.log('Uso: dicio <palavra> [...opções]\n')
   console.log('Tente `dicio --help\' para mais informações.')
-  process.exit(0)
 }
+
+const definitions = [{
+  name: SYNONYMS,
+  options: [ '--synonyms', '-s' ],
+  description: 'Exibe os sinônimos da palavra.',
+}, {
+  name: DEFINITION,
+  options: [ '--definition', '-d' ],
+  description: 'Exibe a definição da palavra.'
+}, {
+  name: NO_MEANING,
+  options: [ '--no-meaning', '-m' ],
+  description: 'Não exibe o significado da palavra.'
+}, {
+  name: null,
+  options: [ '--no-colors' ],
+  description: 'Não exibe cores no terminal.'
+}, {
+  name: HELP,
+  options: [ '--help', '-h', '-?' ],
+  description: 'Exibe essa mensagem e sai.'
+}, {
+  name: VERSION,
+  options: [ '--version', '-v' ],
+  description: 'Exibe a versão e sai.'
+}]
+
+const argData = new ArgumentParser(definitions)
+
+const word
+const options
+
+try {
+  argData.setArguments()
+
+  word = argData.getWord()
+  options = argData.getOptions()
+} catch (error) {
+  console.log(`dicio: ${error.message}`)
+  process.exit(1)
+}
+
+const hasOption = option => options.includes(option)
+
+if (hasOption(HELP)) logMsgHelp()
+if (hasOption(VERSION)) logMsgVersion()
 
 const reqOptions = {
   uri: `https://www.dicio.com.br/${removeAccents(word)}/`,
@@ -129,3 +101,13 @@ const onErrorReq = (error) => {
 request(reqOptions)
   .then(onSuccessReq)
   .catch(onErrorReq)
+
+function logMsgHelp() {
+  // ...
+  process.exit(0)
+}
+
+function logMsgVersion() {
+  console.log(package.version)
+  process.exit(0)
+}

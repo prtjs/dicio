@@ -6,7 +6,7 @@ class ArgumentsParser {
   /**
    * @private
    */
-  _hasOptionRegistered(option) {
+  _isRegistered(option) {
     return !!this.definitions.find((def) => def.options.includes(option))
   }
   _getOptionName(option) {
@@ -32,10 +32,10 @@ class ArgumentsParser {
     const options = []
 
     this.args.forEach((argOption) => {
-      const isRecognized = this._hasOptionRegistered(argOption)
+      const isRegistered = this._isRegistered(argOption)
       const isWord = argOption === this.word
 
-      if (!isRecognized && !isWord) {
+      if (!isRegistered && !isWord) {
         throw new Error(`A opção '${argOption}' não foi reconhecida.`)
       }
 

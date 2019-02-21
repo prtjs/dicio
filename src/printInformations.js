@@ -6,8 +6,8 @@ const printContent = (str) => console.log(colors.white(str))
 const printEtymology = (str) => console.log(colors.italic.gray(str))
 const printEmptyLine = () => console.log()
 
-const printInformations = () => {
-
+const printInformations = (wordInformations, options) => {
+  //...
 }
 
 module.exports = printInformations

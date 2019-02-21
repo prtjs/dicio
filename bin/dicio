@@ -12,7 +12,7 @@ const getWordInformations = require('../src/getWordInformations')
 const printInformations = require('../src/printInformations')
 
 // Estáticos
-const package = require('../package.json')
+const pkg = require('../package.json')
 
 // Nome das opções
 const SYNONYMS = 'SYNONYMS'
@@ -27,6 +27,7 @@ if (args.length === 0) {
   console.log('dicio: Informe uma palavra.')
   console.log('Uso: dicio <palavra> [...opções]\n')
   console.log('Tente `dicio --help\' para mais informações.')
+  process.exit(1)
 }
 
 const definitions = [{
@@ -57,11 +58,11 @@ const definitions = [{
 
 const argData = new ArgumentParser(definitions)
 
-const word
-const options
+let word
+let options
 
 try {
-  argData.setArguments()
+  argData.setArguments(args)
 
   word = argData.getWord()
   options = argData.getOptions()
@@ -72,8 +73,12 @@ try {
 
 const hasOption = option => options.includes(option)
 
-if (hasOption(HELP)) logMsgHelp()
-if (hasOption(VERSION)) logMsgVersion()
+if (hasOption(HELP)) {
+  logMsgHelp(definitions)
+}
+if (hasOption(VERSION)) {
+  logMsgVersion(pkg.version)
+}
 
 const reqOptions = {
   uri: `https://www.dicio.com.br/${removeAccents(word)}/`,
@@ -83,7 +88,7 @@ const reqOptions = {
 
 const onSuccessReq = ($) => {
   const wordInformations = getWordInformations($)
-  printInformations(wordInformations, showMeaning, options)
+  printInformations(wordInformations, options)
 }
 
 const onErrorReq = (error) => {
@@ -102,12 +107,37 @@ request(reqOptions)
   .then(onSuccessReq)
   .catch(onErrorReq)
 
-function logMsgHelp() {
-  // ...
-  process.exit(0)
+function logMsgHelp(definitions) {
+  const SPACE_BETWEEN = 4
+
+  const toStrList = (arr) => arr.join(', ')
+  const addSpaces = (str, n) => ' '.repeat(n) + str
+
+  const lens = definitions.map(def => toStrList(def.options).length)
+  const maxOptLen = Math.max.apply(null, lens)
+
+  const optionsMsg =  definitions.map((def) => {
+    const { options, description } = def
+    const listOptions = toStrList(options)
+    const spacesCount = SPACE_BETWEEN + maxOptLen - listOptions.length
+    const spaces = ' '.repeat(spacesCount)
+
+    return `${listOptions}${spaces}${description}`
+  })
+
+  console.log()
+  console.log(addSpaces('Uso: dicio <palavra> [opções]'), 2)
+  console.log()
+  console.log(addSpaces('Opções disponíveis:'), 2)
+
+  console.log(optionsMsg
+      .map((str) => addSpaces(str, 4))
+      .join('\n'))
+
+   process.exit(0)
 }
 
-function logMsgVersion() {
-  console.log(package.version)
+function logMsgVersion(version) {
+  console.log(`Versão ${version}`)
   process.exit(0)
 }

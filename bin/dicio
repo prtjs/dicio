@@ -13,7 +13,7 @@ function printHelpMsg() {
 
   Opções aceitas:
 
-    --synonyms, -s      Exibe os sinônimos da paalvra.
+    --synonyms, -s      Exibe os sinônimos da palavra.
     --antonyms, -a      Exibe os antônimos da palavra.
     --definition, -d    Exibe a definição da palavra.
     --no-meaning, -m    Não exibe o significado da palavra.

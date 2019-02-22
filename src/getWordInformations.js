@@ -1,13 +1,19 @@
 function getMeaning($) {
-  const toElement = (html) => $(element)
+
+  // Constantes
+  const CLASS = 'CLASS'
+  const ETYMOLOGY = 'ETYMOLOGY'
+  const MEANING = 'MEANING'
+
+  const toElement = (element) => $(element)
   const parseElement = (child) => {
     const isClass = child.hasClass('cl')
     const isEtymology = child.hasClass('etim')
     let type
 
-    if (isClass) type = 'class'
-    if (isEtymology) type = 'etymology'
-    else type = 'meaning'
+    if (isClass) type = CLASS
+    else if (isEtymology) type = ETYMOLOGY
+    else type = MEANING
 
     return {
       type,
@@ -21,7 +27,15 @@ function getMeaning($) {
     .map(parseElement)
 }
 
-const getAdicionais = ($, type) => {
+function addConjuction(words) {
+  return words.reduce((prev, curr, index, arr) => (
+    arr.length - 1 === index
+      ? `${prev} e ${curr}`
+      : `${prev}, ${curr}`
+  ))
+}
+
+function getAdicionais($, type) {
   let element
 
   switch (type) {
@@ -30,6 +44,7 @@ const getAdicionais = ($, type) => {
       break
     case 'antonyms':
       element = $('.sinonimos').last()
+      break
   }
 
   if (!element) return undefined
@@ -41,11 +56,11 @@ const getAdicionais = ($, type) => {
 }
 
 function getSynonyms($) {
-  return getAdicionais($, 'synonyms')
+  return addConjuction(getAdicionais($, 'synonyms'))
 }
 
 function getAntonyms($) {
-  return getAdicionais($, 'antonyms')
+  return addConjuction(getAdicionais($, 'antonyms'))
 }
 
 function getDefinition($) {
@@ -71,7 +86,7 @@ function getWordInformations($) {
     },
     antonyms: {
       title: 'Antônimos',
-      content: getAntonym($)
+      content: getAntonyms($)
     },
     definition: {
       title: 'Definição',
@@ -79,3 +94,5 @@ function getWordInformations($) {
     }
   }
 }
+
+module.exports = getWordInformations

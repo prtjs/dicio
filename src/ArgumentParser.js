@@ -10,14 +10,18 @@ class ArgumentsParser {
     return !!this.definitions.find((def) => def.options.includes(option))
   }
   _getOptionName(option) {
-    return this.definitions.find((def) => def.options.includes(option)).name
+    if (this._isRegistered(option)) {
+      return this.definitions.find((def) => def.options.includes(option)).name
+    }
   }
 
   /**
    * @public
    */
   setArguments(args) {
-    args.map((arg) => {
+    this.args = args
+
+    args.forEach((arg) => {
       if (!/^-/.test(arg)) {
         if (this.word) {
           throw new Error('Mais de uma palavra definida.')
@@ -46,7 +50,7 @@ class ArgumentsParser {
       if (options.includes(optionName)) {
         throw new Error(`A opção '${argOption}' já foi definida.`)
       }
-      if (optionName === null) {
+      if (!optionName) {
         return
       }
 

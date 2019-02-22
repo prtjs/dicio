@@ -16,6 +16,7 @@ const pkg = require('../package.json')
 
 // Nome das opções
 const SYNONYMS = 'SYNONYMS'
+const ANTONYMS = 'ANTONYMS'
 const DEFINITION = 'DEFINITION'
 const NO_MEANING = 'NO_MEANING'
 const HELP = 'HELP'
@@ -34,6 +35,10 @@ const definitions = [{
   name: SYNONYMS,
   options: [ '--synonyms', '-s' ],
   description: 'Exibe os sinônimos da palavra.',
+}, {
+  name: ANTONYMS,
+  options: [ '--antonyms', '-a' ],
+  description: 'Exibe os antonimos da palavra.'
 }, {
   name: DEFINITION,
   options: [ '--definition', '-d' ],
@@ -97,7 +102,7 @@ const onErrorReq = (error) => {
     process.exit(1)
   }
 
-  console.log('dicio: Error interno.')
+  console.log('dicio: Erro interno.')
   console.log(`código: ${error.statusCode}`)
   console.log(`descrição: ${error.message}`)
   process.exit(1)

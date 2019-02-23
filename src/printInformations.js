@@ -1,3 +1,5 @@
+'use strict'
+
 const colors = require('colors')
 
 const printClass = (str) => console.log(colors.bold.yellow(str))
@@ -23,7 +25,7 @@ const printInformations = (wordInformations, options) => {
   const hasOption = (option) => options.includes(option)
   const showMeaning = !hasOption(NO_MEANING)
 
-  if (showMeaning) {
+  if (showMeaning || !showMeaning && options.length === 1) {
     wordInformations.meaning.forEach((data, index) => {
       const isFirstPrint = index === 0
 

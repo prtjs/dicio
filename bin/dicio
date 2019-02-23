@@ -22,13 +22,23 @@ const NO_MEANING = 'NO_MEANING'
 const HELP = 'HELP'
 const VERSION = 'VERSION'
 
+const addSpaces = (str, n) => ' '.repeat(n) + str
+const print = (msg, padLeft) => console.log(addSpaces(msg, padLeft))
+const printEmptyLine = () => console.log()
+
+// Exit functions
+const exitWithSuccess = () => process.exit(0)
+const exitWithError = () => process.exit(1)
+
 const [,, ...args] = process.argv
 
 if (args.length === 0) {
-  console.log('dicio: Informe uma palavra.')
-  console.log('Uso: dicio <palavra> [...opções]\n')
-  console.log('Tente `dicio --help\' para mais informações.')
-  process.exit(1)
+  print('dicio: Informe uma palavra.')
+  print('Uso: dicio <palavra> [...opções]')
+  printEmptyLine()
+  print('Tente `dicio --help\' para mais informações.')
+
+  exitWithError()
 }
 
 const definitions = [{
@@ -72,8 +82,8 @@ try {
   word = argData.getWord()
   options = argData.getOptions()
 } catch (error) {
-  console.log(`dicio: ${error.message}`)
-  process.exit(1)
+  print(`dicio: ${error.message}`)
+  exitWithError()
 }
 
 const hasOption = option => options.includes(option)
@@ -98,14 +108,14 @@ const onSuccessReq = ($) => {
 
 const onErrorReq = (error) => {
   if (error.statusCode === 404) {
-    console.log('Palavra não encontrada.')
-    process.exit(1)
+    print('Palavra não encontrada.')
+    exitWithError()
   }
 
-  console.log('dicio: Erro interno.')
-  console.log(`código: ${error.statusCode}`)
-  console.log(`descrição: ${error.message}`)
-  process.exit(1)
+  print('dicio: Erro interno.')
+  print(`código: ${error.statusCode}`)
+  print(`descrição: ${error.message}`)
+  exitWithError()
 }
 
 request(reqOptions)
@@ -113,36 +123,32 @@ request(reqOptions)
   .catch(onErrorReq)
 
 function logMsgHelp(definitions) {
-  const SPACE_BETWEEN = 4
+  const SPACE_BETWEEN = 2
 
   const toStrList = (arr) => arr.join(', ')
-  const addSpaces = (str, n) => ' '.repeat(n) + str
 
   const lens = definitions.map(def => toStrList(def.options).length)
   const maxOptLen = Math.max.apply(null, lens)
 
-  const optionsMsg =  definitions.map((def) => {
+  printEmptyLine()
+  print('Uso: dicio <palavra> [opções]', 2)
+  printEmptyLine()
+  print('Opções disponíveis:', 2)
+  printEmptyLine()
+
+  definitions.forEach((def) => {
     const { options, description } = def
     const listOptions = toStrList(options)
     const spacesCount = SPACE_BETWEEN + maxOptLen - listOptions.length
     const spaces = ' '.repeat(spacesCount)
 
-    return `${listOptions}${spaces}${description}`
+    print(`${listOptions}${spaces}${description}`, 4)
   })
 
-  console.log()
-  console.log(addSpaces('Uso: dicio <palavra> [opções]'), 2)
-  console.log()
-  console.log(addSpaces('Opções disponíveis:'), 2)
-
-  console.log(optionsMsg
-      .map((str) => addSpaces(str, 4))
-      .join('\n'))
-
-   process.exit(0)
+   exitWithSuccess()
 }
 
 function logMsgVersion(version) {
-  console.log(`Versão ${version}`)
-  process.exit(0)
+  print(`Versão ${version}`)
+  exitWithSuccess()
 }

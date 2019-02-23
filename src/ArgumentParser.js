@@ -1,3 +1,5 @@
+'use strict'
+
 class ArgumentsParser {
   constructor(definitions) {
     this.definitions = definitions

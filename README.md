@@ -12,7 +12,7 @@ Essa ferramenta não é oficial do site!
 
 ## Instalação
 
-Instale-o como quiser, pode ser como `npm` ou `yarn`:
+Instale-o como quiser, pode ser com `npm` ou `yarn`:
 
 Veja os comandos:
 
@@ -46,10 +46,10 @@ significado dela. Não é necessário inserir acentuações na palavra pois elas
 removidas automaticamente durante a pesquisa.
 
 Caso queira ver mais informações sobre ela, como *sinônimos*, *antônimos* ou
-*definição* (como classe gramatical, separação silábica, plural, etc) então
+*definição* (como classe gramatical, separação silábica, plural, etc.) então
 use as opções:
 
-* `--synonyms` ou `-s` para ver os sinônimos da paalvra.
+* `--synonyms` ou `-s` para ver os sinônimos da palavra.
 * `--antonyms` ou `-a` para ver os antônimos da palavra.
 * `--definition` ou `-d` para ver a definição da palavra.
 
@@ -57,7 +57,7 @@ A ordem de exibição desses itens será de acordo com a chamada deles.
 
 O significado da palavra sempre aparecerá junto às outras informações. No
 entanto, caso você não queira exibi-lo, então você poderá usar a opção
-`--no-meaning`.
+`--no-meaning` (ou `-m`).
 
 Use a opção `--no-colors` para não exibir cores no terminal, caso elas estejam
 sendo inconvenientes.
@@ -80,7 +80,7 @@ Sinta-se livre para corrigir qualquer coisa e mandar novas ideias.
 ## Agradecimentos
 
 Muito obrigado ao [Felipe Nolleto](https://github.com/nolleto) por dar o
-pontapé inicial na estilização dos dados extraído presente nessa versão da
+pontapé inicial na estilização dos dados extraídos presente nessa versão da
 ferramenta e a
 [todos os contribuidores](https://github.com/theuves/dicio/graphs/contributors)
 ao longo das versões anteriores.
